@@ -1,0 +1,64 @@
+<div class="row">
+  <div class="col-xs-12">
+    <section class="form-block">
+      <div class="form-group">
+        <a href="..." role="tooltip" aria-haspopup="true" class="tooltip tooltip-md tooltip-bottom-right">
+          <clr-icon shape="info-circle" size="24"></clr-icon>
+          <span class="tooltip-content">За да приложите филтър на резултатите кликнете <clr-icon shape="filter-grid" class="is-solid"></clr-icon> на съответната колона</span>
+        </a>
+        <label for="formFields_13">Приложени филтри  </label>
+        <input type="text" id="formFields_13" size="35" readonly [value]="filterStr">
+      </div>
+    </section>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <clr-datagrid (clrDgRefresh)="refresh($event)" [clrDgLoading]="loading">
+      <clr-dg-column [clrDgField]="'id'">{{columnName('id')}}</clr-dg-column>
+      <clr-dg-column [clrDgField]="'customer.name'">{{columnName('customer.name')}}</clr-dg-column>
+      <clr-dg-column [clrDgField]="'contractor.name'">{{columnName('contractor.name')}}</clr-dg-column>
+      <clr-dg-column [clrDgField]="'goods'">{{columnName('goods')}}</clr-dg-column>
+      <clr-dg-column [clrDgField]="'type'">{{columnName('type')}}</clr-dg-column>
+      <clr-dg-column [clrDgField]="'deadline'">{{columnName('deadline')}}</clr-dg-column>
+      <clr-dg-column [clrDgField]="'createdAt'">{{columnName('createdAt')}}</clr-dg-column>
+
+      <clr-dg-row *clrDgItems="let o of page.items">
+        <clr-dg-cell>{{o.id}}</clr-dg-cell>
+        <clr-dg-cell>{{o.customer.name}}</clr-dg-cell>
+        <clr-dg-cell>{{o.contractor.name}}</clr-dg-cell>
+        <clr-dg-cell>{{o.goods}}</clr-dg-cell>
+        <clr-dg-cell>{{o.type}}</clr-dg-cell>
+        <clr-dg-cell>{{o.deadline | date}}</clr-dg-cell>
+        <clr-dg-cell>{{o.createdAt | date}}</clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>
+        <clr-dg-pagination #pagination [(clrDgPage)]="page.current" [clrDgPageSize]="page.size" [clrDgTotalItems]="page.totalItems"
+          [clrDgLastPage]="page.lastIndex">
+          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
+          от {{pagination.totalItems}} заявки
+        </clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
+  </div>
+</div>
+<div class="clr-row">
+  <div *ngIf="messageService.messages.length" class="alert alert-info">
+    <div class="alert-items">
+      <div *ngFor='let message of messageService.messages' class="alert-item static">
+        <div class="alert-icon-wrapper">
+          <clr-icon class="alert-icon" shape="info-circle"></clr-icon>
+        </div>
+        <span class="alert-text">{{message}}</span>
+        <div class="alert-actions">
+          <a class="alert-action" (click)="messageService.clear()">Acknowledge</a>
+          <a class="alert-action" (click)="messageService.clear()">Reset to green</a>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="close" aria-label="Close">
+      <clr-icon aria-hidden="true" shape="close"></clr-icon>
+    </button>
+  </div>
+</div>
