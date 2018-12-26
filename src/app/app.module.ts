@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { OrdersModule } from './orders/orders.module';
+
 import {
   HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HTTP_INTERCEPTORS
 } from '@angular/common/http';
@@ -18,7 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MessagesComponent } from './messages/messages.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { OrderComponent } from './order/order.component';
+
 import { LoginComponent } from './login/login.component';
 import { ConsoleComponent } from './console/console.component';
 
@@ -40,7 +42,6 @@ export class XhrInterceptor implements HttpInterceptor {
     AppComponent,
     MessagesComponent,
     DashboardComponent,
-    OrderComponent,
     LoginComponent,
     ConsoleComponent
   ],
@@ -50,6 +51,7 @@ export class XhrInterceptor implements HttpInterceptor {
     ClrFormsNextModule,
     BrowserAnimationsModule,
     FormsModule,
+    OrdersModule,
     AppRoutingModule,
     HttpClientModule,
     // The HttpClientInMemoryWebApiModule module intercepts HTTP requests

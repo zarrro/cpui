@@ -20,7 +20,7 @@
       <clr-dg-column [clrDgField]="'contractor.name'">{{columnName('contractor.name')}}</clr-dg-column>
       <clr-dg-column [clrDgField]="'createdAt'">{{columnName('createdAt')}}</clr-dg-column>
 
-      <clr-dg-row *clrDgItems="let o of page.items">
+      <clr-dg-row *clrDgItems="let o of orders">
         <clr-dg-cell>{{o.id}}</clr-dg-cell>
         <clr-dg-cell>{{o.customer.companyName}}</clr-dg-cell>
         <clr-dg-cell>{{o.contractor.companyName}}</clr-dg-cell>
@@ -35,24 +35,5 @@
         </clr-dg-pagination>
       </clr-dg-footer>
     </clr-datagrid>
-  </div>
-</div>
-<div class="clr-row">
-  <div *ngIf="messageService.messages.length" class="alert alert-info">
-    <div class="alert-items">
-      <div *ngFor='let message of messageService.messages' class="alert-item static">
-        <div class="alert-icon-wrapper">
-          <clr-icon class="alert-icon" shape="info-circle"></clr-icon>
-        </div>
-        <span class="alert-text">{{message}}</span>
-        <div class="alert-actions">
-          <a class="alert-action" (click)="messageService.clear()">Acknowledge</a>
-          <a class="alert-action" (click)="messageService.clear()">Reset to green</a>
-        </div>
-      </div>
-    </div>
-    <button type="button" class="close" aria-label="Close">
-      <clr-icon aria-hidden="true" shape="close"></clr-icon>
-    </button>
   </div>
 </div>
