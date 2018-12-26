@@ -6,7 +6,7 @@
           <clr-icon shape="info-circle" size="24"></clr-icon>
           <span class="tooltip-content">За да приложите филтър на резултатите кликнете <clr-icon shape="filter-grid" class="is-solid"></clr-icon> на съответната колона</span>
         </a>
-        <label for="formFields_13">Приложени филтри  </label>
+        <label for="formFields_13">Приложени филтри </label>
         <input type="text" id="formFields_13" size="35" readonly [value]="filterStr">
       </div>
     </section>
@@ -18,19 +18,13 @@
       <clr-dg-column [clrDgField]="'id'">{{columnName('id')}}</clr-dg-column>
       <clr-dg-column [clrDgField]="'customer.name'">{{columnName('customer.name')}}</clr-dg-column>
       <clr-dg-column [clrDgField]="'contractor.name'">{{columnName('contractor.name')}}</clr-dg-column>
-      <clr-dg-column [clrDgField]="'goods'">{{columnName('goods')}}</clr-dg-column>
-      <clr-dg-column [clrDgField]="'type'">{{columnName('type')}}</clr-dg-column>
-      <clr-dg-column [clrDgField]="'deadline'">{{columnName('deadline')}}</clr-dg-column>
       <clr-dg-column [clrDgField]="'createdAt'">{{columnName('createdAt')}}</clr-dg-column>
 
       <clr-dg-row *clrDgItems="let o of page.items">
         <clr-dg-cell>{{o.id}}</clr-dg-cell>
-        <clr-dg-cell>{{o.customer.name}}</clr-dg-cell>
-        <clr-dg-cell>{{o.contractor.name}}</clr-dg-cell>
-        <clr-dg-cell>{{o.goods}}</clr-dg-cell>
-        <clr-dg-cell>{{o.type}}</clr-dg-cell>
-        <clr-dg-cell>{{o.deadline | date}}</clr-dg-cell>
-        <clr-dg-cell>{{o.createdAt | date}}</clr-dg-cell>
+        <clr-dg-cell>{{o.customer.companyName}}</clr-dg-cell>
+        <clr-dg-cell>{{o.contractor.companyName}}</clr-dg-cell>
+        <clr-dg-cell>{{o.creationDate | date}}</clr-dg-cell>
       </clr-dg-row>
 
       <clr-dg-footer>

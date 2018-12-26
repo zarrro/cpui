@@ -37,6 +37,7 @@ export class OrderComponent implements OnInit {
   }
 
   initOrders(): void {
+    //server side paging is ignored
     this.orderService.getOrdersPage(0, 0).subscribe((result: Page<Order>) => {
       this.page = result;
       this.loading = false;

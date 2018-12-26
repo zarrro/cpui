@@ -1,13 +1,10 @@
-import { Company } from './company';
+import { LegalEntity } from './legal-entity';
+import { TransportCompany } from './transport-company';
+import { Auditable } from './auditable';
 
-export class Order {
-    id:number;
-    customer:Company;
-    // state:string;
-    contractor:Company;
-    goods:string;
-    type:string;
-    deadline:string;
-    createdAt:string;
-    updatedAt:string;
+export class Order extends Auditable {
+    id: number;
+    status: string;
+    customer: LegalEntity;
+    contractor: TransportCompany;
 }
