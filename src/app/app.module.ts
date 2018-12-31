@@ -14,7 +14,7 @@ import { AuthGuard } from './auth/auth.guard';
 
 import { AppComponent } from './app.component';
 import { AuthService } from './auth/auth.service';
-import { ClarityModule, ClrFormsNextModule } from '@clr/angular';
+import { ClarityModule } from '@clr/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MessagesComponent } from './messages/messages.component';
@@ -48,7 +48,6 @@ export class XhrInterceptor implements HttpInterceptor {
   imports: [
     BrowserModule,
     ClarityModule,
-    ClrFormsNextModule,
     BrowserAnimationsModule,
     FormsModule,
     OrdersModule,
