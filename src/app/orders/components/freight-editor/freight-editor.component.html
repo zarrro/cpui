@@ -1,4 +1,4 @@
-<form [formGroup]="freightForm" (ngSubmit)="onSubmit()" clrForm>
+<form [formGroup]="wizForm" clrForm>
   <clr-wizard #freightWizard id="freightWizard" clrWizardSize="lg" (clrWizardOnFinish)="doFinish()"
     [clrWizardPreventDefaultCancel]="true" (clrWizardOnCancel)="doCancel()">
     <clr-wizard-title>Нов превоз</clr-wizard-title>
@@ -7,6 +7,27 @@
     <clr-wizard-button [type]="'previous'">назад</clr-wizard-button>
     <clr-wizard-button [type]="'next'">продължи</clr-wizard-button>
     <clr-wizard-button [type]="'finish'">завърши</clr-wizard-button>
+
+    <clr-wizard-page>
+      <ng-template clrPageTitle>Клиент и Изпълнител</ng-template>
+      <div *ngIf="(mode !== WizardMode.NEW_ORDER) && order" class="clr-row">
+        <div class="clr-col-xs-12">
+          <p>Номер на заявка: {{order.id}}</p>
+        </div>
+        <div class="clr-col-xs-12">
+          <p>Клиент: {{order.customer.companyName}}</p>
+        </div>
+      </div>
+      <div *ngIf="mode === WizardMode.NEW_ORDER">
+        <!-- make crud ops for company as a separate component -->
+        <div class="clr-row">
+          <div class="clr-col-xs-12">
+            <h4>Клиент</h4>
+          </div>
+        </div>
+        <app-legal-entity [leControls]="customerGroupRef" [mode]="'COMPANY_EDIT'"></app-legal-entity>
+      </div>
+    </clr-wizard-page>
 
     <ng-container *ngFor="let pi of pointsInfo; let i=index">
       <clr-wizard-page>
@@ -18,84 +39,9 @@
           </ng-container>
         </ng-template>
         <div [formGroup]="pi.formGroupRef">
-          <div class="clr-row clr-align-items-start clr-justify-content-start">
-            <div class="clr-col-xs-12">
-              <span class="clr-control-label wiz-cust-label">Лице за контакт</span>
-            </div>
-          </div>
-          <div class="clr-row clr-align-items-start clr-justify-content-start wiz-cust-row">
-            <div class="clr-col-xs-12 clr-col-md-4">
-              <div class="clr-control-container">
-                <div class="clr-input-wrapper">
-                  <input formControlName="contactFirstName" type="text" id="basic" placeholder="Име" class="clr-input"
-                    size=20>
-                </div>
-              </div>
-            </div>
-            <div class="clr-col-xs-12 clr-col-md-8">
-              <div class="clr-control-container">
-                <div class="clr-input-wrapper">
-                  <input formControlName="contactLastName" type="text" id="basic" placeholder="Фамилия" class="clr-input"
-                    size=20>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="clr-row clr-align-items-start clr-justify-content-start wiz-cust-row">
-            <div class="clr-col-xs-12 clr-col-md-8">
-              <div class="clr-control-container">
-                <div class="clr-input-wrapper">
-                  <input formControlName="contactPhone" type="text" id="basic" placeholder="Телефон" class="clr-input"
-                    size=30>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="clr-row clr-align-items-start clr-justify-content-start wiz-cust-row wiz-cust-form-group-margin">
-            <div class="clr-col-xs-12">
-              <span class="clr-control-label wiz-cust-label">Информация за адреса</span>
-            </div>
-          </div>
-          <div class="clr-row clr-align-items-start clr-justify-content-start wiz-cust-row">
-            <div class="clr-col-xs-12 clr-col-md-4">
-              <div class="clr-control-container">
-                <div class="clr-input-wrapper">
-                  <input formControlName="addressCity" type="text" id="basic" placeholder="Град" class="clr-input" size=20>
-                </div>
-              </div>
-            </div>
-            <div class="clr-col-xs-12 clr-col-md-8">
-              <div class="clr-control-container">
-                <div class="clr-input-wrapper">
-                  <input formControlName="addressZipCode" type="text" id="basic" placeholder="Пощенски код" class="clr-input"
-                    size=20>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="clr-row clr-align-items-start clr-justify-content-start wiz-cust-row ">
-            <div class="clr-col-xs-12 clr-col-md-12">
-              <div class="clr-control-container">
-                <div class="clr-input-wrapper">
-                  <input formControlName="addressLine" type="text" id="basic" placeholder="район, квартал, улица, номер, вх., т.н."
-                    class="clr-input" size=40>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="clr-row clr-align-items-start clr-justify-content-start wiz-cust-row ">
-              <div class="clr-col-xs-12 clr-col-md-12">
-                <div class="clr-control-container">
-                  <div class="clr-input-wrapper">
-                    <input formControlName="companyName" type="text" id="basic" placeholder="име на фирма"
-                      class="clr-input" size=20>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <app-legal-entity [leControls]="pi.formGroupRef" [mode]="ControlMode.LEGAL_ENTITY_EDIT"></app-legal-entity>
 
-          <div *ngIf="pi.type !== PointPosType.FINAL"
-                class="clr-row clr-align-items-start clr-justify-content-start wiz-cust-row wiz-cust-form-group-margin">
+          <div *ngIf="pi.type !== PointPosType.FINAL" class="clr-row clr-align-items-start clr-justify-content-start wiz-cust-row wiz-cust-form-group-margin">
             <div class="clr-col-xs-12">
               <span class="clr-control-label wiz-cust-label">Описание на товарна дейност</span>
             </div>
@@ -118,8 +64,8 @@
           <div class="clr-row clr-align-items-start clr-justify-content-start wiz-cust-row ">
             <div *ngIf="pi.type !== PointPosType.FINAL" class="clr-col-xs-12 clr-col-md-6">
               <div class="clr-control-container">
-                  <textarea class="clr-textarea" formControlName="loadDescription" placeholder="Опишете стоката за товарене"
-                    cols="30"></textarea>
+                <textarea class="clr-textarea" formControlName="loadDescription" placeholder="Опишете стоката за товарене"
+                  cols="30"></textarea>
               </div>
             </div>
             <div *ngIf="pi.type === PointPosType.INTERMEDIATE" class="clr-col-xs-12 clr-col-md-6">
@@ -158,3 +104,4 @@
 </form>
 
 <button class="btn" (click)="openNewFreightWizard()">Добави превоз</button>
+<button class="btn" (click)="openNewOrderWizard()">Добави поръчка</button>

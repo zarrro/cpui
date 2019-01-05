@@ -1,24 +1,15 @@
 <div class="row">
   <div class="col-xs-12">
-    <section class="form-block">
-      <div class="form-group">
-        <a href="..." role="tooltip" aria-haspopup="true" class="tooltip tooltip-md tooltip-bottom-right">
-          <clr-icon shape="info-circle" size="24"></clr-icon>
-          <span class="tooltip-content">За да приложите филтър на резултатите кликнете <clr-icon shape="filter-grid" class="is-solid"></clr-icon> на съответната колона</span>
-        </a>
-        <label for="formFields_13">Приложени филтри </label>
-        <input type="text" id="formFields_13" size="35" readonly [value]="filterStr">
-      </div>
-    </section>
+      <app-dg-filters-state [columnNameMap]="columnNames"></app-dg-filters-state>
   </div>
 </div>
 <div class="row">
   <div class="col-xs-12">
     <clr-datagrid (clrDgRefresh)="refresh($event)" [clrDgLoading]="loading">
-      <clr-dg-column [clrDgField]="'id'">{{columnName('id')}}</clr-dg-column>
-      <clr-dg-column [clrDgField]="'customer.name'">{{columnName('customer.name')}}</clr-dg-column>
-      <clr-dg-column [clrDgField]="'contractor.name'">{{columnName('contractor.name')}}</clr-dg-column>
-      <clr-dg-column [clrDgField]="'createdAt'">{{columnName('createdAt')}}</clr-dg-column>
+      <clr-dg-column [clrDgField]="'id'">{{columnNames['id']}}</clr-dg-column>
+      <clr-dg-column [clrDgField]="'customer.companyName'">{{columnNames['customer.companyName']}}</clr-dg-column>
+      <clr-dg-column [clrDgField]="'contractor.companyName'">{{columnNames['contractor.companyName']}}</clr-dg-column>
+      <clr-dg-column [clrDgField]="'createdAt'">{{columnNames['createdAt']}}</clr-dg-column>
 
       <clr-dg-row *clrDgItems="let o of orders">
         <clr-dg-cell>{{o.id}}</clr-dg-cell>

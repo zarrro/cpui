@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ClrWizard } from "@clr/angular";
 import { FormGroup, FormControl, FormBuilder, FormArray } from '@angular/forms';
+import { Freight } from "../../../domain/freight";
+import { Order } from 'src/app/domain/order';
+import { ControlMode } from '../legal-entity/legal-entity.component';
 
 enum PointPosType {
   START = "START",
@@ -31,18 +34,27 @@ export class FreightEditorComponent implements OnInit {
   PointPosType = PointPosType;
   WizardMode = WizardMode;
 
+  // used in the tamplate
+  ControlMode = ControlMode;
+
+  public frieghts:Freight[];
+  public order:Order;
+  // default is new order
+  private mode:WizardMode = WizardMode.NEW_ORDER;
+
+  private customerGroupRef:FormGroup = new FormGroup({});
   //to be used by the wizard. FormArray breaks the wizard generation
   private pointsInfo: PointInfo[];
 
   @ViewChild("freightWizard") wizard: ClrWizard;
 
-  private freightForm:FormGroup;
+  private wizForm:FormGroup;
 
   constructor(private fb: FormBuilder) {
   }
 
   get points(): FormArray {
-    return this.freightForm.get('points') as FormArray;
+    return this.wizForm.get('points') as FormArray;
   }
 
   public addPoint(index: number): void {
@@ -60,6 +72,7 @@ export class FreightEditorComponent implements OnInit {
       p.type = PointPosType.INTERMEDIATE;
     }
     p.formGroupRef = this.createPointFormGroup(p.type);
+    this.addCompanyEnitityControls(p.formGroupRef);
     this.points.insert(index, p.formGroupRef);
     this.pointsInfo.splice(index, 0, p);
   }
@@ -84,20 +97,31 @@ export class FreightEditorComponent implements OnInit {
     }
   }
 
+  private addCompanyEnitityControls(group:FormGroup) {
+    group.addControl("legalId", new FormControl(''));
+    group.addControl("companyType", new FormControl(''));
+    group.addControl("isTransport", new FormControl(''));
+    group.addControl("isSpedition", new FormControl(''));
+    this.addLegalEntityControls(group);
+  }
+  
+  private addLegalEntityControls(group:FormGroup) {
+    group.addControl("contactFirstName", new FormControl(''));
+    group.addControl("contactLastName", new FormControl(''));
+    group.addControl("contactPhone", new FormControl(''));
+    group.addControl("companyName", new FormControl(''));
+    group.addControl("addressCity", new FormControl(''));
+    group.addControl("addressZipCode", new FormControl(''));
+    group.addControl("addressLine", new FormControl(''));
+  }
+
   private createPointFormGroup(pointPos: PointPosType): FormGroup {
     let point: FormGroup = this.fb.group({
       loading: [''],
       loadDescription: [''],
       unloading: [''],
       unloadDescription: [''],
-      notes: [''],
-      contactFirstName: [''],
-      contactLastName: [''],
-      contactPhone: [''],
-      companyName: [''],
-      addressCity: [''],
-      addressZipCode: [''],
-      addressLine: ['']
+      notes: ['']
     })
 
     let loading: FormControl = point.get('loading') as FormControl;
@@ -162,6 +186,14 @@ export class FreightEditorComponent implements OnInit {
     this.wizard.open();
   }
 
+  public openNewOrderWizard() {
+    // to workaround issue that wizard is opened from the 3rd page
+    // also, in generel wizard for new freight is expected to be opened in clean state
+    this.initFormControls(WizardMode.NEW_ORDER);
+    this.wizard.reset();
+    this.wizard.open();
+  }
+
   public doFinish() {
     this.wizard.reset();
   }
@@ -182,11 +214,15 @@ export class FreightEditorComponent implements OnInit {
   }
 
   private initFormControls(wizardMode:WizardMode) {
+    this.initCommonContols();
     switch(wizardMode) {
-      case WizardMode.NEW_FREIGHT:
-        this.initFormControlsNewFreight();
-      break;
       case WizardMode.NEW_ORDER:
+        this.customerGroupRef = new FormGroup({});
+        this.addCompanyEnitityControls(this.customerGroupRef);
+        this.wizForm.addControl("customer", this.customerGroupRef);
+        break;
+      case WizardMode.NEW_FREIGHT:
+        this.mode = WizardMode.NEW_FREIGHT;
       break;
       case WizardMode.EDIT_FREIGHT:
       break;
@@ -197,11 +233,11 @@ export class FreightEditorComponent implements OnInit {
     }
   }
 
-  private initFormControlsNewFreight() {
+  private initCommonContols() {
     this.pointsInfo = [];
-    this.freightForm = this.fb.group({
-      startDate: [''],
-      price: [''],
+    this.wizForm = this.fb.group({
+      freightStartDate: [''],
+      freightPrice: [''],
       points: this.fb.array([])
     });
 
@@ -212,6 +248,6 @@ export class FreightEditorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initFormControls(WizardMode.NEW_FREIGHT);
+    this.initFormControls(WizardMode.NEW_ORDER);
   }
 }

@@ -6,9 +6,11 @@ import { environment } from '../../../environments/environment';
 import { } from '../../ui-common/page';
 import { Order } from '../../domain/order';
 import { Page } from '../../ui-common/page';
+import { Freight } from 'src/app/domain/freight';
 
 const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 const ordersUrl = environment.apiUrl + "/orders";
+const freightsUrl = environment.apiUrl + "/freights";
 
 @Injectable({
     providedIn: 'root'
@@ -32,7 +34,13 @@ export class OrderService {
         let url = ordersUrl;
         return this.http.get(url, { headers: headers }).pipe(
             map((body:Object) => (body as Order[])),
-            catchError(this.handleError<Order[]>('getOrdersPage')));
+            catchError(this.handleError<Order[]>('getOrders')));
+    }
+
+    getFreights(): Observable<Freight[]> {
+        return this.http.get(freightsUrl, { headers: headers }).pipe(
+            map((body:Object) => (body as Freight[])),
+            catchError(this.handleError<Freight[]>('getFreights')));
     }
 /* 
     private addPagingUrlParams(url: string, page: number, size: number): string {
